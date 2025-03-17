@@ -37,7 +37,6 @@ var evaluator = {
       this.result = evaluatee + ' - ' + this.type
       return this
     } else {
-
       return this
     }
   },
@@ -49,7 +48,6 @@ var evaluator = {
       this.result = evaluatee + ' - ' + this.type
       return this
     } else {
-
       return this
     }
   },
@@ -62,24 +60,31 @@ var evaluator = {
       this.result = evaluatee + ' - ' + this.type
       return this
     } else {
-      
       return this
     }
   }
 }
 
 fs.readFile('./output/output.txt', 'utf8', function(err, content) {
-  if (err) throw console.error('Error writing output', err);
+  if (err) throw console.error('Error reading output', err);
 
   contentArr = content.split(',')
 
   _.forEach(contentArr, function(item) {
     var result = evaluator.isAlphaNumeric(item.trim()).isAlphabeticString().isRealNumber().isInteger()
-    evaluatedArr.push(result.result)
-    console.log(result.result)
+    if (result.result) {
+      evaluatedArr.push(result.result)
+      console.log(result.result)
+    } else {
+      console.log('Invalid result for item:', item);
+    }
   })
 
-  fs.writeFile('./output/result.txt', evaluatedArr, function(err, content) {
+  // Debugging log to inspect evaluatedArr before writing
+  // console.log('Evaluated Array:', evaluatedArr);
+
+  // Updated line to join the array into a string
+  fs.writeFile('./output/result.txt', evaluatedArr.join('\n'), function(err) {
     if (err) throw console.error('Error writing evaluation', err);
     console.log('It\'s evaluated in /output/result.txt!')
   })
